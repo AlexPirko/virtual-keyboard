@@ -1,0 +1,1 @@
+Virtual Keyboard task by Alex Pirko on vanilla JS

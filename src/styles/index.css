@@ -1,0 +1,11 @@
+html {
+  font-size: 10px;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: Arial, sans-serif;
+  font-style: normal;
+  color: #222020;
+}
