@@ -1,13 +1,15 @@
 {
   "env": {
     "browser": true,
-    "es6": true,
+    "commonjs": true,
+    "es2021": true,
     "node": true
   },
   "extends": ["airbnb/base"],
   "rules": {
     "no-plusplus": "off",
     "import/prefer-default-export": "off",
+    "printWidth": 120,
     "linebreak-style": 0
   }
 }

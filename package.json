@@ -38,6 +38,7 @@
     "webpack-dev-server": "^4.9.0"
   },
   "dependencies": {
+    "eslint-plugin-prettier": "^4.2.1",
     "node-sass": "^8.0.0",
     "normalize.css": "^8.0.1"
   }

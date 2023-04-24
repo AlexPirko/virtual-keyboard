@@ -9,3 +9,60 @@ body {
   font-style: normal;
   color: #222020;
 }
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.title,
+.subtitle {
+  text-align: center;
+}
+
+.textarea {
+  width: calc(100% - 20px);
+  min-height: 250px;
+  margin: 0 20px;
+  padding: 10px;
+  border: 3px solid #5f6370;
+  box-shadow: 0 0 20px #1c2132;
+}
+
+.keyboard {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.keybtn {
+  width: 6%;
+  height: 45px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2px;
+  border: 2px solid #5f6370;
+  border-radius: 6px;
+  box-shadow: 0 0 5px #1c2132;
+  cursor: pointer;
+  transition: 0.4s ease-in-out;
+}
+
+.keybtn__extrawide {
+  width: 15.4%;
+}
+
+.keybtn__wide {
+  width: 14%;
+}
+
+.keybtn__halfwide {
+  width: 7.5%;
+}
+
+.keybtn__superwide {
+  width: 40.2%;
+}
