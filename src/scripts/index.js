@@ -72,7 +72,7 @@ class Keyboard {
           keyEl.addEventListener('click', () => {
             this.value = this.value
               .substring(0, this.value.length - 1);
-            document.getElementById('textarea').innerHTML = this.value;
+            this.printText(this.value);
           });
 
           break;
@@ -83,7 +83,7 @@ class Keyboard {
 
           keyEl.addEventListener('click', () => {
             this.value += '\t';
-            document.getElementById('textarea').innerHTML = this.value;
+            this.printText(this.value);
           });
 
           break;
@@ -93,9 +93,15 @@ class Keyboard {
           keyEl.innerHTML = 'Del';
 
           keyEl.addEventListener('click', () => {
+            const textarea = document.getElementById('textarea');
+            const cursorPos = textarea.selectionStart;
             this.value = this.value
-              .substring(0, this.value.length - 1);
-            document.getElementById('textarea').innerHTML = this.value;
+              .substring(0, cursorPos)
+            + this.value
+              .substring(cursorPos + 1, this.value.length);
+            textarea.innerHTML = this.value;
+            textarea.focus();
+            textarea.selectionStart = cursorPos;
           });
 
           break;
@@ -116,7 +122,7 @@ class Keyboard {
 
           keyEl.addEventListener('click', () => {
             this.value += '\n';
-            document.getElementById('textarea').innerHTML = this.value;
+            this.printText(this.value);
           });
 
           break;
@@ -132,7 +138,7 @@ class Keyboard {
 
           keyEl.addEventListener('click', () => {
             this.value += ' ';
-            document.getElementById('textarea').innerHTML = this.value;
+            this.printText(this.value);
           });
 
           break;
@@ -164,13 +170,20 @@ class Keyboard {
               ? key.toUpperCase()
               : key.toLowerCase();
             // let initialValue = document.getElementById('textarea').innerHTML;
-            document.getElementById('textarea').innerHTML = this.value;
+            this.printText(this.value);
           });
       }
       fragment.appendChild(keyEl);
     });
 
     return fragment;
+  }
+
+  printText(printValue) {
+    const textarea = document.getElementById('textarea');
+    textarea.innerHTML = printValue;
+    textarea.focus();
+    textarea.selectionStart = textarea.value.length;
   }
 
   toggleCaps() {
@@ -185,33 +198,11 @@ class Keyboard {
       }
     }
   }
-
-  // markEvent() {
-  //   document.addEventListener('keydown', function(e) {
-  //     const keys = document.querySelectorAll('.keybtn')
-  //     for(let i = 0; i < keys.length; i++) {
-  //         if(e.key == keys[i].getAttribute('keyname' ) || e.key == keys[i].getAttribute('lowerCaseName')) {
-  //             keys[i].classList.add('active')
-  //         }
-  //         if(e.code == 'Space') {
-  //             spaceKey.classList.add('active')
-  //         }
-  //         if(e.code == 'ShiftLeft') {
-  //             shift_right.classList.remove('active')
-  //         }
-  //         if(e.code == 'ShiftRight') {
-  //             shift_left.classList.remove('active')
-  //         }
-  //         if(e.code == 'CapsLock') {
-  //             caps_lock_key.classList.toggle('active');
-  //         }
-  //     }
-  //   })
-  // }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   const keyboard = new Keyboard();
   keyboard.init();
+  document.getElementById('textarea').focus();
   console.log(keyboard);
 });
