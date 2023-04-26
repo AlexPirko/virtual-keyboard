@@ -169,10 +169,17 @@ class Keyboard {
             this.value += this.capsLock
               ? key.toUpperCase()
               : key.toLowerCase();
-            // let initialValue = document.getElementById('textarea').innerHTML;
-            this.printText(this.value);
           });
       }
+
+      keyEl.addEventListener('click', () => {
+        keyEl.classList.add('active');
+        this.printText(this.value);
+        setTimeout(() => {
+          keyEl.classList.remove('active');
+        }, 300);
+      });
+
       fragment.appendChild(keyEl);
     });
 
@@ -180,10 +187,10 @@ class Keyboard {
   }
 
   printText(printValue) {
-    const textarea = document.getElementById('textarea');
-    textarea.innerHTML = printValue;
-    textarea.focus();
-    textarea.selectionStart = textarea.value.length;
+    this.textarea = document.getElementById('textarea');
+    this.textarea.innerHTML = printValue;
+    this.textarea.focus();
+    this.textarea.selectionStart = this.textarea.value.length;
   }
 
   toggleCaps() {
@@ -204,5 +211,4 @@ window.addEventListener('DOMContentLoaded', () => {
   const keyboard = new Keyboard();
   keyboard.init();
   document.getElementById('textarea').focus();
-  console.log(keyboard);
 });

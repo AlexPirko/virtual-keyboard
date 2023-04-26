@@ -52,7 +52,18 @@ body {
 }
 
 .keybtn.active {
-  background-color: #706a5f;
+  animation: keys_animation 0.4s ease-out;
+}
+
+@keyframes keys_animation {
+  0% {
+      background-color: #8d95af;
+      color: #fff;
+  }
+  100% {
+      background-color: #f3f3f3;
+      color: #000;
+  }
 }
 
 .keybtn__extrawide {
