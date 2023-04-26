@@ -51,6 +51,10 @@ body {
   transition: 0.4s ease-in-out;
 }
 
+.keybtn.active {
+  background-color: #706a5f;
+}
+
 .keybtn__extrawide {
   width: 15.4%;
 }
