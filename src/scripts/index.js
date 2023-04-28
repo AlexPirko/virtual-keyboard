@@ -58,11 +58,19 @@ class Keyboard {
 
     const keyLayout = engKeyLayout;
 
-    keyLayout.forEach((key) => {
+    keyLayout.forEach((key, i) => {
       const keyEl = document.createElement('button');
 
       keyEl.classList.add('keybtn');
       keyEl.setAttribute('type', 'button');
+
+      const keyCode = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace',
+        'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Delete',
+        'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter',
+        'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight',
+        'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'];
+
+      keyEl.setAttribute('data', keyCode[i]);
 
       switch (key) {
         case 'backspace':
@@ -169,12 +177,12 @@ class Keyboard {
             this.value += this.capsLock
               ? key.toUpperCase()
               : key.toLowerCase();
+            this.printText(this.value);
           });
       }
 
       keyEl.addEventListener('click', () => {
         keyEl.classList.add('active');
-        this.printText(this.value);
         setTimeout(() => {
           keyEl.classList.remove('active');
         }, 300);
@@ -205,10 +213,29 @@ class Keyboard {
       }
     }
   }
+
+  static animatedPushingKeys() {
+    document.addEventListener('keydown', (e) => {
+      document.querySelector(`.keybtn[data="${e.code}"]`).classList.add('active');
+    });
+    document.addEventListener('keyup', (e) => {
+      document.querySelector(`.keybtn[data="${e.code}"]`).classList.remove('active');
+    });
+  }
 }
+
+// function animatedPushingKeys() {
+//   document.addEventListener('keydown', (e) => {
+//     document.querySelector(`.keybtn[data="${e.code}"]`).classList.add('active');
+//   });
+//   document.addEventListener('keyup', (e) => {
+//     document.querySelector(`.keybtn[data="${e.code}"]`).classList.remove('active');
+//   });
+// }
+// animatedPushingKeys();
 
 window.addEventListener('DOMContentLoaded', () => {
   const keyboard = new Keyboard();
   keyboard.init();
-  document.getElementById('textarea').focus();
+  keyboard.animatedPushingKeys();
 });
