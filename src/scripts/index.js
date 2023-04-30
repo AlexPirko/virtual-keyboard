@@ -7,6 +7,33 @@ class Keyboard {
     this.keys = [];
     this.value = '';
     this.capsLock = false;
+    // localStorage.getItem('layout') || 'ru';
+
+    this.engKeyLayout = [
+      '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
+      'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'delete',
+      'capsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'enter',
+      'shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '▲', 'shift',
+      'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
+    ];
+
+    this.shiftEngLayout = [
+      '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'backspace',
+      'tab', 'q', 'w', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '|', 'delete',
+      'capsLock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 'enter',
+      'shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', '▲', 'shift',
+      'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
+    ];
+
+    this.ruKeyLayout = [
+      'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
+      'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'delete',
+      'capsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
+      'shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '▲', 'shift',
+      'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
+    ];
+
+    this.keyLayout = this.engKeyLayout;
   }
 
   init() {
@@ -38,27 +65,35 @@ class Keyboard {
     systemInfo.textContent = 'The keyboard was created on Windows. To change the language press Ctrl + Alt';
   }
 
+  shiftLayout() {
+    this.keyLayout = this.shiftEngLayout;
+
+    for (const key of this.keys) {
+      key.textContent = key.textContent.toUpperCase();
+    }
+    
+    document.querySelector('.keyboard').textContent = '';
+    document.querySelector('.keyboard').appendChild(this.createKeyElements());
+  }
+
+  unShiftLayout() {
+    this.keyLayout = this.engKeyLayout;
+    document.querySelector('.keyboard').textContent = '';
+    document.querySelector('.keyboard').appendChild(this.createKeyElements());
+  }
+
   createKeyElements() {
     const fragment = document.createDocumentFragment();
-    const engKeyLayout = [
-      '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
-      'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'delete',
-      'capsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'enter',
-      'shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '▲', 'shift',
-      'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
-    ];
+    console.log(this.keyLayout);
 
-    const ruKeyLayout = [
-      'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
-      'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'delete',
-      'capsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
-      'shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '▲', 'shift',
-      'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
-    ];
+    // let newKeyLayout;
+    // if (this.keyLayout === 'eng') {
+    // newKeyLayout = this.engKeyLayout;
+    // } else {
+    //   newKeyLayout = this.ruKeyLayout;
+    // }
 
-    const keyLayout = engKeyLayout;
-
-    keyLayout.forEach((key, i) => {
+    this.keyLayout.forEach((key, i) => {
       const keyEl = document.createElement('button');
 
       keyEl.classList.add('keybtn');
@@ -204,7 +239,6 @@ class Keyboard {
   toggleCaps() {
     this.capsLock = !this.capsLock;
 
-    // eslint-disable-next-line no-restricted-syntax
     for (const key of this.keys) {
       if (key.childElementCount === 0) {
         key.textContent = this.capsLock
@@ -214,28 +248,78 @@ class Keyboard {
     }
   }
 
-  static animatedPushingKeys() {
-    document.addEventListener('keydown', (e) => {
-      document.querySelector(`.keybtn[data="${e.code}"]`).classList.add('active');
+  addKeysFunctions() {
+    document.addEventListener('keypress', (e) => {
+      e.preventDefault();
     });
+
+    document.addEventListener('keydown', (e) => {
+      const key = document.querySelector(`.keybtn[data="${e.code}"]`);
+      if (key) {
+        console.log(e);
+        e.preventDefault();
+        key.classList.add('active');
+        if (e.key === 'ArrowUp') {
+          this.value += '▲';
+          this.printText(this.value);
+        } else if (e.key === 'ArrowLeft') {
+          this.value += '◄';
+          this.printText(this.value);
+        } else if (e.key === 'ArrowDown') {
+          this.value += '▼';
+          this.printText(this.value);
+        } else if (e.key === 'ArrowRight') {
+          this.value += '►';
+          this.printText(this.value);
+        } else if (key.classList.contains('keybtn__letter')) {
+          this.value += this.capsLock
+            ? e.key.toUpperCase()
+            : e.key.toLowerCase();
+          this.printText(this.value);
+        } else if (e.key === 'CapsLock' && !e.repeat) {
+          this.toggleCaps();
+        } else if (e.key === 'Backspace') {
+          this.value = this.value
+            .substring(0, this.value.length - 1);
+          this.printText(this.value);
+        } else if (e.key === 'Tab') {
+          this.value += '\t';
+          this.printText(this.value);
+        } else if (e.key === 'Delete') {
+          const textarea = document.getElementById('textarea');
+          const cursorPos = textarea.selectionStart;
+          this.value = this.value
+            .substring(0, cursorPos)
+              + this.value
+                .substring(cursorPos + 1, this.value.length);
+          textarea.innerHTML = this.value;
+          textarea.focus();
+          textarea.selectionStart = cursorPos;
+        } else if (e.key === 'Enter') {
+          this.value += '\n';
+          this.printText(this.value);
+        } else if (e.key === ' ') {
+          this.value += ' ';
+          this.printText(this.value);
+        } else if (e.key === 'Shift' && !e.repeat) {
+          this.shiftLayout();
+        }
+      }
+    });
+
     document.addEventListener('keyup', (e) => {
-      document.querySelector(`.keybtn[data="${e.code}"]`).classList.remove('active');
+      e.preventDefault();
+      const key = document.querySelector(`.keybtn[data="${e.code}"]`);
+      key.classList.remove('active');
+      if (e.key === 'Shift' && !e.repeat) {
+        this.unShiftLayout();
+      }
     });
   }
 }
 
-// function animatedPushingKeys() {
-//   document.addEventListener('keydown', (e) => {
-//     document.querySelector(`.keybtn[data="${e.code}"]`).classList.add('active');
-//   });
-//   document.addEventListener('keyup', (e) => {
-//     document.querySelector(`.keybtn[data="${e.code}"]`).classList.remove('active');
-//   });
-// }
-// animatedPushingKeys();
-
 window.addEventListener('DOMContentLoaded', () => {
   const keyboard = new Keyboard();
   keyboard.init();
-  keyboard.animatedPushingKeys();
+  keyboard.addKeysFunctions();
 });
