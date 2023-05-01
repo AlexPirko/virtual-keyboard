@@ -66,6 +66,11 @@ body {
   }
 }
 
+.keybtn.pushed {
+  background-color: #8d95af;
+  color: #fff;
+}
+
 .keybtn__extrawide {
   width: 15.4%;
 }

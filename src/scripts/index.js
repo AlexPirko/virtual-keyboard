@@ -7,6 +7,7 @@ class Keyboard {
     this.keys = [];
     this.value = '';
     this.capsLock = false;
+    this.shift = false;
     // localStorage.getItem('layout') || 'ru';
 
     this.engKeyLayout = [
@@ -19,7 +20,7 @@ class Keyboard {
 
     this.shiftEngLayout = [
       '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'backspace',
-      'tab', 'q', 'w', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '|', 'delete',
+      'tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '|', 'delete',
       'capsLock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 'enter',
       'shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', '▲', 'shift',
       'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
@@ -67,11 +68,6 @@ class Keyboard {
 
   shiftLayout() {
     this.keyLayout = this.shiftEngLayout;
-
-    for (const key of this.keys) {
-      key.textContent = key.textContent.toUpperCase();
-    }
-    
     document.querySelector('.keyboard').textContent = '';
     document.querySelector('.keyboard').appendChild(this.createKeyElements());
   }
@@ -84,14 +80,6 @@ class Keyboard {
 
   createKeyElements() {
     const fragment = document.createDocumentFragment();
-    console.log(this.keyLayout);
-
-    // let newKeyLayout;
-    // if (this.keyLayout === 'eng') {
-    // newKeyLayout = this.engKeyLayout;
-    // } else {
-    //   newKeyLayout = this.ruKeyLayout;
-    // }
 
     this.keyLayout.forEach((key, i) => {
       const keyEl = document.createElement('button');
@@ -154,6 +142,7 @@ class Keyboard {
           keyEl.innerHTML = 'CapsLock';
 
           keyEl.addEventListener('click', () => {
+            keyEl.classList.toggle('pushed');
             this.toggleCaps();
           });
 
@@ -171,7 +160,7 @@ class Keyboard {
           break;
 
         case 'shift':
-          keyEl.classList.add('keybtn__wide');
+          keyEl.classList.add('keybtn__wide', 'shift-key');
           keyEl.innerHTML = 'Shift';
 
           break;
@@ -205,7 +194,7 @@ class Keyboard {
           break;
 
         default:
-          keyEl.textContent = key.toLowerCase();
+          keyEl.textContent = key;
           keyEl.classList.add('keybtn__letter');
 
           keyEl.addEventListener('click', () => {
@@ -249,10 +238,6 @@ class Keyboard {
   }
 
   addKeysFunctions() {
-    document.addEventListener('keypress', (e) => {
-      e.preventDefault();
-    });
-
     document.addEventListener('keydown', (e) => {
       const key = document.querySelector(`.keybtn[data="${e.code}"]`);
       if (key) {
@@ -278,6 +263,7 @@ class Keyboard {
           this.printText(this.value);
         } else if (e.key === 'CapsLock' && !e.repeat) {
           this.toggleCaps();
+          key.classList.toggle('pushed');
         } else if (e.key === 'Backspace') {
           this.value = this.value
             .substring(0, this.value.length - 1);
@@ -302,6 +288,7 @@ class Keyboard {
           this.value += ' ';
           this.printText(this.value);
         } else if (e.key === 'Shift' && !e.repeat) {
+          this.capsLock = !this.capsLock;
           this.shiftLayout();
         }
       }
@@ -312,6 +299,24 @@ class Keyboard {
       const key = document.querySelector(`.keybtn[data="${e.code}"]`);
       key.classList.remove('active');
       if (e.key === 'Shift' && !e.repeat) {
+        this.capsLock = !this.capsLock;
+        this.unShiftLayout();
+      }
+    });
+
+    document.addEventListener('mousedown', (e) => {
+      if (e.target.classList.value === 'keybtn keybtn__wide shift-key') {
+        e.target.classList.add('active');
+        console.log('nvvcb n');
+        this.shiftLayout();
+        this.capsLock = !this.capsLock;
+      }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+      if (e.target.classList.value === 'keybtn keybtn__wide shift-key') {
+        e.target.classList.add('remove');
+        this.capsLock = !this.capsLock;
         this.unShiftLayout();
       }
     });
