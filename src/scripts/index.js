@@ -78,6 +78,12 @@ class Keyboard {
     document.querySelector('.keyboard').appendChild(this.createKeyElements());
   }
 
+  changeLanguage() {
+    this.keyLayout = this.ruKeyLayout;
+    document.querySelector('.keyboard').textContent = '';
+    document.querySelector('.keyboard').appendChild(this.createKeyElements());
+  }
+
   createKeyElements() {
     const fragment = document.createDocumentFragment();
 
@@ -93,7 +99,7 @@ class Keyboard {
         'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight',
         'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'];
 
-      keyEl.setAttribute('data', keyCode[i]);
+      keyEl.setAttribute('id', keyCode[i]);
 
       switch (key) {
         case 'backspace':
@@ -228,6 +234,7 @@ class Keyboard {
   toggleCaps() {
     this.capsLock = !this.capsLock;
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const key of this.keys) {
       if (key.childElementCount === 0) {
         key.textContent = this.capsLock
@@ -239,27 +246,15 @@ class Keyboard {
 
   addKeysFunctions() {
     document.addEventListener('keydown', (e) => {
-      const key = document.querySelector(`.keybtn[data="${e.code}"]`);
+      const key = document.querySelector(`.keybtn[id="${e.code}"]`);
       if (key) {
-        console.log(e);
         e.preventDefault();
+        console.log(key.textContent);
         key.classList.add('active');
-        if (e.key === 'ArrowUp') {
-          this.value += '▲';
-          this.printText(this.value);
-        } else if (e.key === 'ArrowLeft') {
-          this.value += '◄';
-          this.printText(this.value);
-        } else if (e.key === 'ArrowDown') {
-          this.value += '▼';
-          this.printText(this.value);
-        } else if (e.key === 'ArrowRight') {
-          this.value += '►';
-          this.printText(this.value);
-        } else if (key.classList.contains('keybtn__letter')) {
+        if (key.classList.contains('keybtn__letter')) {
           this.value += this.capsLock
-            ? e.key.toUpperCase()
-            : e.key.toLowerCase();
+            ? key.textContent.toUpperCase()
+            : key.textContent.toLowerCase();
           this.printText(this.value);
         } else if (e.key === 'CapsLock' && !e.repeat) {
           this.toggleCaps();
@@ -290,13 +285,15 @@ class Keyboard {
         } else if (e.key === 'Shift' && !e.repeat) {
           this.capsLock = !this.capsLock;
           this.shiftLayout();
+        } else if (e.ctrlKey && e.altKey) {
+          this.changeLanguage();
         }
       }
     });
 
     document.addEventListener('keyup', (e) => {
       e.preventDefault();
-      const key = document.querySelector(`.keybtn[data="${e.code}"]`);
+      const key = document.querySelector(`.keybtn[id="${e.code}"]`);
       key.classList.remove('active');
       if (e.key === 'Shift' && !e.repeat) {
         this.capsLock = !this.capsLock;
@@ -307,7 +304,6 @@ class Keyboard {
     document.addEventListener('mousedown', (e) => {
       if (e.target.classList.value === 'keybtn keybtn__wide shift-key') {
         e.target.classList.add('active');
-        console.log('nvvcb n');
         this.shiftLayout();
         this.capsLock = !this.capsLock;
       }
