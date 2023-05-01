@@ -8,7 +8,6 @@ class Keyboard {
     this.value = '';
     this.capsLock = false;
     this.shift = false;
-    // localStorage.getItem('layout') || 'ru';
 
     this.engKeyLayout = [
       '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
@@ -34,7 +33,16 @@ class Keyboard {
       'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
     ];
 
-    this.keyLayout = this.engKeyLayout;
+    this.shiftRuLayout = [
+      'Ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+', 'backspace',
+      'tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '|', 'delete',
+      'capsLock', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', 'enter',
+      'shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', '▲', 'shift',
+      'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
+    ];
+
+    this.keyLayout = localStorage.getItem('layout') || 'eng';
+    this.setLanguage();
   }
 
   init() {
@@ -66,20 +74,41 @@ class Keyboard {
     systemInfo.textContent = 'The keyboard was created on Windows. To change the language press Ctrl + Alt';
   }
 
+  setLanguage() {
+    if (this.keyLayout === 'eng') {
+      this.keyLayout = this.engKeyLayout;
+    } else if (this.keyLayout === 'ru') {
+      this.keyLayout = this.ruKeyLayout;
+    }
+  }
+
   shiftLayout() {
-    this.keyLayout = this.shiftEngLayout;
+    if (this.keyLayout === this.engKeyLayout) {
+      this.keyLayout = this.shiftEngLayout;
+    } else if (this.keyLayout === this.ruKeyLayout) {
+      this.keyLayout = this.shiftRuLayout;
+    }
     document.querySelector('.keyboard').textContent = '';
     document.querySelector('.keyboard').appendChild(this.createKeyElements());
   }
 
   unShiftLayout() {
-    this.keyLayout = this.engKeyLayout;
+    if (this.keyLayout === this.shiftEngLayout) {
+      this.keyLayout = this.engKeyLayout;
+    } else if (this.keyLayout === this.shiftRuLayout) {
+      this.keyLayout = this.ruKeyLayout;
+    }
     document.querySelector('.keyboard').textContent = '';
     document.querySelector('.keyboard').appendChild(this.createKeyElements());
   }
 
   changeLanguage() {
-    this.keyLayout = this.ruKeyLayout;
+    this.keyLayout = this.keyLayout === this.engKeyLayout ? this.ruKeyLayout : this.engKeyLayout;
+    if (this.keyLayout === this.engKeyLayout) {
+      localStorage.setItem('layout', 'eng');
+    } else if (this.keyLayout === this.ruKeyLayout) {
+      localStorage.setItem('layout', 'ru');
+    }
     document.querySelector('.keyboard').textContent = '';
     document.querySelector('.keyboard').appendChild(this.createKeyElements());
   }
