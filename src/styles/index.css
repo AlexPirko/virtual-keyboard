@@ -86,3 +86,33 @@ body {
 .keybtn__superwide {
   width: 40.2%;
 }
+
+@media (max-width: 992px) {
+
+  .container {
+    max-width: 550px;
+  }
+
+  .keybtn {
+    width: 5.85%;
+    height: 35px;
+    font-size: 1rem;
+  }
+
+  .keybtn__extrawide {
+    width: 13.4%;
+  }
+  
+  .keybtn__wide {
+    width: 13%;
+  }
+  
+  .keybtn__halfwide {
+    width: 6.5%;
+  }
+  
+  .keybtn__superwide {
+    width: 43.2%;
+  }
+
+}
