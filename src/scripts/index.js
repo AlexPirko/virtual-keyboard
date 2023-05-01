@@ -323,10 +323,12 @@ class Keyboard {
     document.addEventListener('keyup', (e) => {
       e.preventDefault();
       const key = document.querySelector(`.keybtn[id="${e.code}"]`);
-      key.classList.remove('active');
-      if (e.key === 'Shift' && !e.repeat) {
-        this.capsLock = !this.capsLock;
-        this.unShiftLayout();
+      if(key) {
+        key.classList.remove('active');
+        if (e.key === 'Shift' && !e.repeat) {
+          this.capsLock = !this.capsLock;
+          this.unShiftLayout();
+        }
       }
     });
 
