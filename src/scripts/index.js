@@ -265,11 +265,9 @@ class Keyboard {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const key of this.keys) {
-      if (key.childElementCount === 0) {
-        key.textContent = this.capsLock
-          ? key.textContent.toUpperCase()
-          : key.textContent.toLowerCase();
-      }
+      key.textContent = this.capsLock
+        ? key.textContent.toUpperCase()
+        : key.textContent.toLowerCase();
     }
   }
 
@@ -333,17 +331,18 @@ class Keyboard {
     });
 
     document.addEventListener('mousedown', (e) => {
-      if (e.target.classList.value === 'keybtn keybtn__wide shift-key') {
-        e.target.classList.add('active');
+      if (e.target.id === 'ShiftLeft' || e.target.id === 'ShiftRight') {
+        e.target.classList.add('pushed');
+
+        this.shift = true;
         this.shiftLayout();
-        this.capsLock = !this.capsLock;
       }
     });
 
     document.addEventListener('mouseup', (e) => {
-      if (e.target.classList.value === 'keybtn keybtn__wide shift-key') {
-        e.target.classList.add('remove');
-        this.capsLock = !this.capsLock;
+      if (e.target.id === 'ShiftLeft' || e.target.id === 'ShiftRight') {
+        e.target.classList.remove('pushed');
+        this.shift = false;
         this.unShiftLayout();
       }
     });

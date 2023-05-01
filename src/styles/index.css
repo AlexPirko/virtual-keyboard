@@ -66,7 +66,7 @@ body {
   }
 }
 
-.keybtn.pushed {
+.pushed {
   background-color: #8d95af;
   color: #fff;
 }
