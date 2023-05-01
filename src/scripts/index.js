@@ -98,6 +98,7 @@ class Keyboard {
     } else if (this.keyLayout === this.shiftRuLayout) {
       this.keyLayout = this.ruKeyLayout;
     }
+    this.capsLock = false;
     document.querySelector('.keyboard').textContent = '';
     document.querySelector('.keyboard').appendChild(this.createKeyElements());
   }
@@ -262,7 +263,6 @@ class Keyboard {
 
   toggleCaps() {
     this.capsLock = !this.capsLock;
-
     // eslint-disable-next-line no-restricted-syntax
     for (const key of this.keys) {
       key.textContent = this.capsLock
@@ -276,7 +276,6 @@ class Keyboard {
       const key = document.querySelector(`.keybtn[id="${e.code}"]`);
       if (key) {
         e.preventDefault();
-        console.log(key.textContent);
         key.classList.add('active');
         if (key.classList.contains('keybtn__letter')) {
           this.value += this.capsLock
@@ -332,8 +331,7 @@ class Keyboard {
 
     document.addEventListener('mousedown', (e) => {
       if (e.target.id === 'ShiftLeft' || e.target.id === 'ShiftRight') {
-        e.target.classList.add('pushed');
-
+        e.target.classList.add('active');
         this.shift = true;
         this.shiftLayout();
       }
